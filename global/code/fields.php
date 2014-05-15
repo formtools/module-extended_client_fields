@@ -397,10 +397,9 @@ function ecf_admin_save_extended_client_fields($postdata)
     $query = mysql_query("
       SELECT client_field_id
       FROM   {$g_table_prefix}module_extended_client_fields
-      WHERE  (template_hook = 'edit_client_main_top' OR
+      WHERE  template_hook = 'edit_client_main_top' OR
              template_hook = 'edit_client_main_middle' OR
-             template_hook = 'edit_client_main_bottom') AND
-             admin_only = 'no'
+             template_hook = 'edit_client_main_bottom'
         ");
 
     $client_field_ids = array();
@@ -434,9 +433,8 @@ function ecf_admin_save_extended_client_fields($postdata)
     $query = mysql_query("
       SELECT client_field_id
       FROM   {$g_table_prefix}module_extended_client_fields
-      WHERE  (template_hook = 'edit_client_settings_top' OR
-             template_hook = 'edit_client_settings_bottom') AND
-             admin_only = 'no'
+      WHERE  template_hook = 'edit_client_settings_top' OR
+             template_hook = 'edit_client_settings_bottom'
             ");
 
     $client_field_ids = array();
@@ -479,9 +477,10 @@ function ecf_client_save_extended_client_fields($postdata)
     $query = mysql_query("
       SELECT client_field_id
       FROM   {$g_table_prefix}module_extended_client_fields
-      WHERE  template_hook = 'edit_client_main_top' OR
+      WHERE  (template_hook = 'edit_client_main_top' OR
              template_hook = 'edit_client_main_middle' OR
-             template_hook = 'edit_client_main_bottom'
+             template_hook = 'edit_client_main_bottom') AND
+             admin_only = 'no'
         ");
 
     $client_field_ids = array();
@@ -515,8 +514,9 @@ function ecf_client_save_extended_client_fields($postdata)
     $query = mysql_query("
       SELECT client_field_id
       FROM   {$g_table_prefix}module_extended_client_fields
-      WHERE  template_hook = 'edit_client_settings_top' OR
-             template_hook = 'edit_client_settings_bottom'
+      WHERE  (template_hook = 'edit_client_settings_top' OR
+             template_hook = 'edit_client_settings_bottom') AND
+             admin_only = 'no'
         ");
 
     $client_field_ids = array();

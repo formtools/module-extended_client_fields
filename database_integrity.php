@@ -99,7 +99,7 @@ $STRUCTURE["tables"]["module_extended_client_field_options"] = array(
 );
 
 $HOOKS = array();
-$HOOKS["1.2.5"] = array(
+$HOOKS["1.2.6"] = array(
   array(
     "hook_type"       => "template",
     "action_location" => "admin_edit_client_main_top",
