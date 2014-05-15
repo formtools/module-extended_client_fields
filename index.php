@@ -34,10 +34,27 @@ $page_vars["head_title"] = $L["module_name"];
 $page_vars["pagination"] = ft_get_page_nav($num_results, $num_fields_per_page, $page, "");
 $page_vars["head_js"] =<<< EOF
 var page_ns = {};
-page_ns.delete_field = function(client_field_id)
-{
-  if (confirm("{$L["confirm_delete_field"]}"))
-    window.location = 'index.php?delete=' + client_field_id;
+page_ns.delete_dialog = $("<div></div>");
+page_ns.delete_field = function(client_field_id) {
+  ft.create_dialog({
+    dialog:      page_ns.delete_dialog,
+    title:      "{$LANG["phrase_please_confirm"]}",
+    content:    "{$L["confirm_delete_field"]}",
+    popup_type: "warning",
+    buttons: [{
+        text: "{$LANG["word_yes"]}",
+        click: function() {
+          window.location = 'index.php?delete=' + client_field_id;
+        }
+      },
+      {
+        text: "{$LANG["word_no"]}",
+        click: function() {
+          $(this).dialog("close");
+        }
+      }
+    ]
+  });
 }
 EOF;
 

@@ -23,13 +23,13 @@ rules.push("required,template_hook,{$L["validation_no_template_hook"]}");
 rules.push("required,field_label,{$L["validation_no_field_label"]}");
 rules.push("required,field_type,{$L["validation_no_field_type"]}");
 
-Event.observe(window, "dom:loaded", function() { ecf_ns.num_rows = $num_options; });
+$(function() { ecf_ns.num_rows = $num_options; });
 
 var page_ns = {};
-page_ns.delete_field = function(client_field_id)
-{
-  if (confirm("{$L["confirm_delete_field"]}"))
+page_ns.delete_field = function(client_field_id) {
+  if (confirm("{$L["confirm_delete_field"]}")) {
     window.location = 'index.php?delete=' + client_field_id;
+  }
 }
 EOF;
 

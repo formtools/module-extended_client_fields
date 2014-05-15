@@ -2,8 +2,12 @@
 
   <table cellpadding="0" cellspacing="0">
   <tr>
-    <td width="45"><img src="images/icon_extended_client_fields.gif" width="34" height="34" /></td>
-    <td class="title">{$L.module_name|upper}</td>
+    <td width="45"><a href="index.php"><img src="images/icon_extended_client_fields.gif" border="0" width="34" height="34" /></a></td>
+    <td class="title">
+      <a href="../../admin/modules">{$LANG.word_modules}</a>
+      <span class="joiner">&raquo;</span>
+      {$L.module_name}
+    </td>
   </tr>
   </table>
 
@@ -28,9 +32,9 @@
       {if $results|@count > 1}<th width="40">{$LANG.word_order}</th>{/if}
       <th>{$LANG.phrase_field_label}</th>
       <th>{$LANG.phrase_field_type}</th>
-      <th width="100" nowrap>{$LANG.phrase_admin_only}</th>
-      <th width="60">{$LANG.word_edit|upper}</th>
-      <th width="60" class="del">{$LANG.word_delete|upper}</th>
+      <th width="160" nowrap>{$LANG.phrase_admin_only}</th>
+      <th class="edit"></th>
+      <th class="del"></th>
     </tr>
 
     {foreach from=$results item=field name=row}
@@ -49,10 +53,9 @@
              <span class="blue">{$LANG.word_no}</span>
            {/if}
          </td>
-        <td align="center"><a href="edit.php?id={$id}">{$LANG.word_edit|upper}</a></td>
-        <td class="del"><a href="#" onclick="return page_ns.delete_field({$id})">{$LANG.word_delete|upper}</a></td>
+        <td class="edit"><a href="edit.php?id={$id}"></a></td>
+        <td class="del"><a href="#" onclick="return page_ns.delete_field({$id})"></a></td>
       </tr>
-
     {/foreach}
     </table>
 

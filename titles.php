@@ -16,5 +16,4 @@ $page_vars["main_account_page_bottom_title"] = ft_get_module_settings("main_acco
 $page_vars["settings_page_top_title"] = ft_get_module_settings("settings_page_top_title");
 $page_vars["settings_page_bottom_title"] = ft_get_module_settings("settings_page_bottom_title");
 
-
 ft_display_module_page("templates/titles.tpl", $page_vars);

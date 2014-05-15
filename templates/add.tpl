@@ -3,7 +3,13 @@
   <table cellpadding="0" cellspacing="0">
   <tr>
     <td width="45"><a href="index.php"><img src="images/icon_extended_client_fields.gif" border="0" width="34" height="34" /></a></td>
-    <td class="title">{$LANG.phrase_add_field|upper}</td>
+    <td class="title">
+      <a href="../../admin/modules">{$LANG.word_modules}</a>
+      <span class="joiner">&raquo;</span>
+      <a href="./">{$L.module_name}</a>
+      <span class="joiner">&raquo;</span>
+      {$LANG.phrase_add_field}
+    </td>
   </tr>
   </table>
 
@@ -49,7 +55,7 @@
     <tr>
       <td>{$L.phrase_field_type}</td>
       <td>
-        <select name="field_type" id="field_type" onchange="ecf_ns.change_field_type(this.value)">
+        <select name="field_type" id="field_type">
           <option value="" selected>{$LANG.phrase_please_select}</option>
           <option value="textbox">{$LANG.word_textbox}</option>
           <option value="textarea">{$LANG.word_textarea}</option>
@@ -81,7 +87,7 @@
     </tr>
     </table>
 
-    <div class="box margin_top_large" id="field_options_div" style="display:none; width: 312px">
+    <div class="box margin_top_large" id="field_options_div" style="display:none; width: 362px">
       <div style="padding: 6px">
         <div class="bold margin_bottom">{$LANG.phrase_field_options}</div>
 
@@ -95,12 +101,12 @@
             <label for="fo3">{$LANG.word_na}</label>
         </div>
 
-        <table cellspacing="1" cellpadding="0" id="field_options_table" class="list_table margin_bottom_large" style="width: 300px">
+        <table cellspacing="1" cellpadding="0" id="field_options_table" class="list_table margin_bottom_large" style="width: 360px">
         <tbody>
           <tr>
             <th width="40"> </th>
             <th>{$LANG.phrase_display_text}</th>
-            <th class="del" width="70">{$LANG.word_delete|upper}</th>
+            <th class="del"></th>
           </tr>
         </tbody>
         </table>

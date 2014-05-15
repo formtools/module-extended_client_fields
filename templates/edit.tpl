@@ -3,7 +3,13 @@
   <table cellpadding="0" cellspacing="0">
   <tr>
     <td width="45"><a href="index.php"><img src="images/icon_extended_client_fields.gif" border="0" width="34" height="34" /></a></td>
-    <td class="title">{$LANG.phrase_edit_field|upper}</td>
+    <td class="title">
+      <a href="../../admin/modules">{$LANG.word_modules}</a>
+      <span class="joiner">&raquo;</span>
+      <a href="./">{$L.module_name}</a>
+      <span class="joiner">&raquo;</span>
+      {$LANG.phrase_edit_field}
+    </td>
   </tr>
   </table>
 
@@ -85,9 +91,9 @@
     <div class="box margin_top_large" id="field_options_div"
       {if $field_info.field_type == "textbox" || $field_info.field_type == "textarea" || $field_info.field_type == "wysiwyg"
         || $field_info.field_type == "password"}
-          style="display:none; width: 312px"
+          style="display:none; width: 362px"
       {else}
-        style="width: 312px"
+        style="width: 362px"
       {/if}>
       <div style="padding: 6px">
         <div class="bold margin_bottom">{$LANG.phrase_field_options}</div>
@@ -108,19 +114,19 @@
             <label for="fo3">{$LANG.word_na}</label>
         </div>
 
-        <table cellspacing="1" cellpadding="0" id="field_options_table" class="list_table margin_bottom_large" style="width: 300px">
+        <table cellspacing="1" cellpadding="0" id="field_options_table" class="list_table margin_bottom_large" style="width: 360px">
         <tbody>
           <tr>
             <th width="40"> </th>
             <th>{$LANG.phrase_display_text}</th>
-            <th class="del" width="70">{$LANG.word_delete|upper}</th>
+            <th class="del"></th>
           </tr>
           {foreach from=$field_info.options item=option name=row}
             {assign var=count value=$smarty.foreach.row.iteration}
               <tr id="row_{$count}">
-          <td class="medium_grey" align="center" id="field_option_{$count}_order">{$count}</td>
-          <td><input type="text" style="width:98%" name="field_option_text_{$count}" value="{$option.option_text|escape}" /></td>
-          <td align="center" class="del"><a href="#" onclick="ecf_ns.delete_field_option({$count})">{$LANG.word_delete|upper}</a></td>
+                <td class="medium_grey" align="center" id="field_option_{$count}_order">{$count}</td>
+                <td><input type="text" style="width:98%" name="field_option_text_{$count}" value="{$option.option_text|escape}" /></td>
+                <td class="del"><a href="#" onclick="ecf_ns.delete_field_option({$count})"></a></td>
               </tr>
             {/foreach}
           </tbody>

@@ -13,7 +13,7 @@
     <td class="red" align="center" width="15">
       {if $extended_field.is_required == "yes"}
         *
-        <script type="text/javascript">
+        <script>
         {if $extended_field.field_type == "checkboxes" || $extended_field.field_type == "multi-select"}
           rules.push("required,ecf_{$client_field_id}[],{$extended_field.error_string|escape}");
         {else}
