@@ -21,14 +21,14 @@ function extended_client_fields__install($module_id)
     error_string mediumtext,
     field_order smallint(6) NOT NULL,
     PRIMARY KEY  (client_field_id)
-  ) ENGINE=InnoDB  DEFAULT CHARSET=utf8";
+  ) ENGINE=MyISAM DEFAULT CHARSET=utf8";
 
   $queries[] = "CREATE TABLE {$g_table_prefix}module_extended_client_field_options (
     client_field_id mediumint(9) NOT NULL,
     option_text varchar(255) default NULL,
     field_order smallint(6) NOT NULL,
     PRIMARY KEY (client_field_id, field_order)
-  ) TYPE=InnoDB DEFAULT CHARSET=utf8";
+  ) TYPE=MyISAM DEFAULT CHARSET=utf8";
 
   $queries[] = "INSERT INTO {$g_table_prefix}settings (setting_name, setting_value, module) VALUES ('main_account_page_top_title', '', 'extended_client_fields')";
   $queries[] = "INSERT INTO {$g_table_prefix}settings (setting_name, setting_value, module) VALUES ('main_account_page_middle_title', '', 'extended_client_fields')";
