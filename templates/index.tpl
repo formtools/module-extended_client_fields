@@ -59,7 +59,9 @@
   {/if}
 
     <p>
-      <input type="submit" name="update_order" value="{$L.phrase_update_order}" />
+		  {if $results|@count > 1}
+        <input type="submit" name="update_order" value="{$L.phrase_update_order}" />
+		  {/if}
       <input type="submit" name="add_field" value="{$L.phrase_add_new_field}" />
     </p>
   </form>
