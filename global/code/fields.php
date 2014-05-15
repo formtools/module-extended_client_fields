@@ -170,7 +170,7 @@ function ecf_get_client_fields($page_num = 1, $num_per_page = 10, $search = arra
 
 
 /**
- * Deletes an extended client field. This also has various ramifications throughout the 
+ * Deletes an extended client field. This also has various ramifications throughout the
  * rest of the script, so it tidies up them all. Namely:
  *  -- it deletes any data added for clients in the removed field
  *  -- it deletes any Client Map View filters that map to this field
@@ -184,40 +184,40 @@ function ecf_delete_field($client_field_id)
   mysql_query("DELETE FROM {$g_table_prefix}account_settings WHERE setting_name = 'ecf_{$client_field_id}'");
 
   ecf_reorder_fields();
-	
-	// delete any View filters that have this as a client map. We do a little extra legwork 
-	// here just to keep the database clean. Namely, Views have a "has_client_map_filter" flag
-	// that may need to be updated after we delete the client map filters. So, we log the affected
-	// View IDs and examine each. If there are no client map filters left after deleting the
-	// filter, we update the "has_client_map_filter" value to "no".
-	$filters_query = mysql_query("SELECT * FROM {$g_table_prefix}view_filters WHERE filter_values = 'ecf_{$client_field_id}'");
-	$affected_view_ids = array();
-	while ($row = mysql_fetch_assoc($filters_query))
-	  $affected_view_ids[] = $row["view_id"];
-	
-	// delete the filters
-	mysql_query("DELETE FROM {$g_table_prefix}view_filters WHERE filter_values = 'ecf_{$client_field_id}'");
+
+  // delete any View filters that have this as a client map. We do a little extra legwork
+  // here just to keep the database clean. Namely, Views have a "has_client_map_filter" flag
+  // that may need to be updated after we delete the client map filters. So, we log the affected
+  // View IDs and examine each. If there are no client map filters left after deleting the
+  // filter, we update the "has_client_map_filter" value to "no".
+  $filters_query = mysql_query("SELECT * FROM {$g_table_prefix}view_filters WHERE filter_values = 'ecf_{$client_field_id}'");
+  $affected_view_ids = array();
+  while ($row = mysql_fetch_assoc($filters_query))
+    $affected_view_ids[] = $row["view_id"];
+
+  // delete the filters
+  mysql_query("DELETE FROM {$g_table_prefix}view_filters WHERE filter_values = 'ecf_{$client_field_id}'");
 
   foreach ($affected_view_ids as $view_id)
-	{
-	  $query = mysql_query("
-		  SELECT count(*) as c 
-			FROM   {$g_table_prefix}view_filters 
-			WHERE  view_id = $view_id
-			AND    filter_type = 'client_map'
-			  ");
-		$result = mysql_fetch_assoc($query);
+  {
+    $query = mysql_query("
+      SELECT count(*) as c
+      FROM   {$g_table_prefix}view_filters
+      WHERE  view_id = $view_id
+      AND    filter_type = 'client_map'
+        ");
+    $result = mysql_fetch_assoc($query);
 
-		// if there are no results found, update the has_client_map_filter value  
-		if ($result["c"] == 0)
-		{
-		  mysql_query("
-			  UPDATE {$g_table_prefix}views
-				SET    has_client_map_filter = 'no'
-				WHERE  view_id = $view_id
-				  ");							  
-		}
-	}
+    // if there are no results found, update the has_client_map_filter value
+    if ($result["c"] == 0)
+    {
+      mysql_query("
+        UPDATE {$g_table_prefix}views
+        SET    has_client_map_filter = 'no'
+        WHERE  view_id = $view_id
+          ");
+    }
+  }
 
   return array(true, $L["notify_field_deleted"]);
 }
@@ -362,7 +362,7 @@ function ecf_display_fields($location, $template_vars)
 }
 
 
-/** 
+/**
  * A wrapper function to get around a bug introduced in 1.1.0.
  */
 function ecf_admin_save_extended_fields($postdata)
@@ -650,33 +650,33 @@ function ecf_reorder_fields()
 
 
 /**
- * This is called by the "start" hook in the ft_get_view_filter_sql function. It 
+ * This is called by the "start" hook in the ft_get_view_filter_sql function. It
  * adds the extended client field placeholder variable with the e
  */
 function ecf_update_view_filter_sql_placeholders($info)
 {
   $is_client_account = (isset($_SESSION["ft"]["account"]["account_type"]) &&
     $_SESSION["ft"]["account"]["account_type"] == "client") ? true : false;
-	
-  if ($is_client_account)
-	{
-		if (isset($_SESSION["ft"]["account"]["settings"]) && is_array($_SESSION["ft"]["account"]["settings"]))
-		{
-      while (list($key, $value) = each($_SESSION["ft"]["account"]["settings"]))
-			{
-			  if (preg_match("/^ecf_(\d)+$/", $key, $matches))
-					$info["placeholders"][$key] = $value;
-			}
-		}
-	}
 
-	return $info;
+  if ($is_client_account)
+  {
+    if (isset($_SESSION["ft"]["account"]["settings"]) && is_array($_SESSION["ft"]["account"]["settings"]))
+    {
+      while (list($key, $value) = each($_SESSION["ft"]["account"]["settings"]))
+      {
+        if (preg_match("/^ecf_(\d)+$/", $key, $matches))
+          $info["placeholders"][$key] = $value;
+      }
+    }
+  }
+
+  return $info;
 }
 
 
 /**
- * This content is inserted into the head of the Edit View page. It supplements the list 
- * of Extended Client Fields for use by the Client Map Filters JS. 
+ * This content is inserted into the head of the Edit View page. It supplements the list
+ * of Extended Client Fields for use by the Client Map Filters JS.
  *
  * @param array $info
  * @return array
@@ -691,20 +691,20 @@ function ecf_insert_head_js($location, $info)
   ft_include_module("extended_client_fields");
   $client_fields = ecf_get_client_fields(1, "all");
 
-	$section = $LANG["extended_client_fields"]["module_name"];
+  $section = $LANG["extended_client_fields"]["module_name"];
 
-	$js_rows = array();
-	foreach ($client_fields["results"] as $client_field)
-	{
-	  $client_field_id = $client_field["client_field_id"];
-		$field_label     = htmlspecialchars($client_field["field_label"]);
-		$js_rows[] = "page_ns.clientFields.push({val: \"ecf_{$client_field_id}\", text: \"$field_label\", section: \"$section\"})";
-	} 
+  $js_rows = array();
+  foreach ($client_fields["results"] as $client_field)
+  {
+    $client_field_id = $client_field["client_field_id"];
+    $field_label     = htmlspecialchars($client_field["field_label"]);
+    $js_rows[] = "page_ns.clientFields.push({val: \"ecf_{$client_field_id}\", text: \"$field_label\", section: \"$section\"})";
+  }
 
-	if (empty($js_rows))
-	  return;
+  if (empty($js_rows))
+    return;
 
-	$js = join(";\n", $js_rows);
+  $js = join(";\n", $js_rows);
 
   echo <<< EOF
 <script type="text/javascript">

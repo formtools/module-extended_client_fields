@@ -77,7 +77,7 @@ function extended_client_fields__install($module_id)
   ft_register_hook("template", "extended_client_fields", "edit_client_settings_bottom", "", "ecf_display_fields");
   ft_register_hook("code", "extended_client_fields", "end", "ft_update_client", "ecf_client_save_extended_client_fields");
 
-	// general code hooks
+  // general code hooks
   ft_register_hook("code", "extended_client_fields", "start", "ft_get_view_filter_sql", "ecf_update_view_filter_sql_placeholders");
 
   return array($success, $message);
@@ -97,9 +97,9 @@ function extended_client_fields__uninstall($module_id)
   $client_fields = ecf_get_client_fields(1, "all");
 
   // manually delete all fields. The ecf_delete_field function takes care of various
-	// details that we don't want to worry about here
+  // details that we don't want to worry about here
   foreach ($client_fields["results"] as $client_field_info)
-		ecf_delete_field($client_field_info["client_field_id"]);
+    ecf_delete_field($client_field_info["client_field_id"]);
 
   $result = mysql_query("DROP TABLE {$g_table_prefix}module_extended_client_fields");
   $result = mysql_query("DROP TABLE {$g_table_prefix}module_extended_client_field_options");
@@ -119,10 +119,14 @@ function extended_client_fields__upgrade($old_version, $new_version)
   {
     ft_register_hook("template", "extended_client_fields", "admin_edit_view_client_map_filter_dropdown", "", "ecf_display_extended_field_options");
   }
-
   if ($old_version_info["release_date"] < 20091113)
   {
     ft_register_hook("code", "extended_client_fields", "start", "ft_get_view_filter_sql", "ecf_update_view_filter_sql_placeholders");
     ft_register_hook("template", "extended_client_fields", "head_bottom", "", "ecf_insert_head_js");
+  }
+  if ($old_version_info["release_date"] < 20100910)
+  {
+    @mysql_query("ALTER TABLE {$g_table_prefix}module_extended_client_fields TYPE=MyISAM");
+    @mysql_query("ALTER TABLE {$g_table_prefix}module_extended_client_field_options TYPE=MyISAM");
   }
 }
