@@ -226,6 +226,7 @@ $FILES = array(
   "lang/en_us.php",
   "library.php",
   "module.php",
+  "module_config.php",
   "smarty/",
   "smarty/section_html.tpl",
   "templates/",
