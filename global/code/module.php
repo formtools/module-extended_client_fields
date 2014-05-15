@@ -15,20 +15,22 @@ function extended_client_fields__install($module_id)
     admin_only enum('yes','no') default NULL,
     field_label varchar(255) NOT NULL,
     field_type enum('textbox','textarea','password','radios','checkboxes','select','multi-select') NOT NULL,
+  	option_source enum('option_list', 'custom_list') NOT NULL DEFAULT 'option_list',
+  	option_list_id MEDIUMINT NULL,
     field_orientation enum('horizontal','vertical','na') NOT NULL default 'na',
     default_value varchar(255) default NULL,
     is_required enum('yes','no') default NULL,
     error_string mediumtext,
     field_order smallint(6) NOT NULL,
     PRIMARY KEY  (client_field_id)
-  ) ENGINE=MyISAM DEFAULT CHARSET=utf8";
+  ) DEFAULT CHARSET=utf8";
 
   $queries[] = "CREATE TABLE {$g_table_prefix}module_extended_client_field_options (
     client_field_id mediumint(9) NOT NULL,
     option_text varchar(255) default NULL,
     field_order smallint(6) NOT NULL,
     PRIMARY KEY (client_field_id, field_order)
-  ) TYPE=MyISAM DEFAULT CHARSET=utf8";
+  ) DEFAULT CHARSET=utf8";
 
   $queries[] = "INSERT INTO {$g_table_prefix}settings (setting_name, setting_value, module) VALUES ('main_account_page_top_title', '', 'extended_client_fields')";
   $queries[] = "INSERT INTO {$g_table_prefix}settings (setting_name, setting_value, module) VALUES ('main_account_page_middle_title', '', 'extended_client_fields')";
@@ -65,7 +67,7 @@ function extended_client_fields__install($module_id)
   ft_register_hook("template", "extended_client_fields", "admin_edit_client_main_bottom", "", "ecf_display_fields");
   ft_register_hook("template", "extended_client_fields", "admin_edit_client_settings_top", "", "ecf_display_fields");
   ft_register_hook("template", "extended_client_fields", "admin_edit_client_settings_bottom", "", "ecf_display_fields");
-  ft_register_hook("template", "extended_client_fields", "admin_edit_view_client_map_filter_dropdown", "", "ecf_display_extended_field_options");
+  ft_register_hook("template", "extended_client_fields", "admin_edit_view_client_map_filter_dropdown", "", "ecf_display_extended_field_options", 50, true);
   ft_register_hook("template", "extended_client_fields", "head_bottom", "", "ecf_insert_head_js");
   ft_register_hook("code", "extended_client_fields", "end", "ft_admin_update_client", "ecf_admin_save_extended_client_fields");
 
@@ -128,5 +130,19 @@ function extended_client_fields__upgrade($old_version, $new_version)
   {
     @mysql_query("ALTER TABLE {$g_table_prefix}module_extended_client_fields TYPE=MyISAM");
     @mysql_query("ALTER TABLE {$g_table_prefix}module_extended_client_field_options TYPE=MyISAM");
+  }
+
+  if ($old_version_info["release_date"] < 20110619)
+  {
+  	mysql_query("
+  	  ALTER TABLE {$g_table_prefix}module_extended_client_fields
+  	  ADD option_source ENUM('option_list', 'custom_list') NOT NULL DEFAULT 'option_list' AFTER field_type
+  	  ADD option_list_id MEDIUMINT NULL AFTER option_source
+  	");
+  	mysql_query("
+  	  UPDATE {$g_table_prefix}module_extended_client_fields
+  	  SET    option_source = 'custom_list'
+  	  WHERE  field_type = 'radios' OR field_type = 'checkboxes' OR field_type = 'select' OR field_type = 'multi-select'
+  	");
   }
 }

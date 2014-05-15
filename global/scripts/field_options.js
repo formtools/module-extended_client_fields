@@ -94,6 +94,8 @@ ecf_ns.add_field_option = function(default_val, default_txt) {
   tbody.appendChild(row);
 
   $("#num_rows").val(ecf_ns.num_rows);
+
+  return false;
 }
 
 

@@ -19,7 +19,7 @@ $L["module_description"] = "This module lets you create additional fields for cl
 $L["word_top"] = "Top";
 $L["word_middle"] = "Middle";
 $L["word_bottom"] = "Bottom";
-$L["word_orientation_c"] = "Orientation:";
+$L["word_orientation"] = "Orientation";
 $L["word_settings"] = "Settings";
 $L["word_help"] = "Help";
 
@@ -41,9 +41,10 @@ $L["phrase_main_account_middle"] = "Main Account Page - Middle";
 $L["phrase_main_account_bottom"] = "Main Account Page - Bottom";
 $L["phrase_settings_page_top"] = "Settings Page - Top";
 $L["phrase_settings_page_bottom"] = "Settings Page - Bottom";
+$L["phrase_field_option_source"] = "Field Option Source";
+$L["phrase_custom_list"] = "Custom List";
 
-$L["confirm_delete_field"] = "Are you sure you want to delete this extended field? This cannot be undone."; 
-
+$L["confirm_delete_field"] = "Are you sure you want to delete this extended field? This cannot be undone.";
 
 $L["notify_no_fields"] = "There are no additional fields added to the module yet. Click the button below to add a new field.";
 $L["notify_problem_installing"] = "There following error occurred when trying to create the database tables for this module: <b>{\$error}</b>";

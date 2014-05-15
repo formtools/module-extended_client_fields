@@ -32,44 +32,64 @@
         <input type="password" name="ecf_{$client_field_id}" value="{$extended_field.content|escape}" size="20" />
       {elseif $extended_field.field_type == "radios"}
 
-        {foreach from=$extended_field.options key=k2 item=option name=row}
-          {assign var="count" value=$smarty.foreach.row.iteration}
-          {assign var="escaped_value" value=$option.option_text}
-          <input type="radio" name="ecf_{$client_field_id}" id="eft_{$client_field_id}_{$count}" value="{$option.option_text|escape}"
-            {if $escaped_value == $extended_field.content}checked{/if} />
-            <label for="eft_{$client_field_id}_{$count}">{$option.option_text|escape}</label>
-            {if $extended_field.field_orientation == "vertical"}<br />{/if}
-        {/foreach}
+        {if $extended_field.option_source == "custom_list"}
+          {foreach from=$extended_field.options key=k2 item=option name=row}
+            {assign var="count" value=$smarty.foreach.row.iteration}
+            {assign var="escaped_value" value=$option.option_text}
+            <input type="radio" name="ecf_{$client_field_id}" id="eft_{$client_field_id}_{$count}" value="{$option.option_text|escape}"
+              {if $escaped_value == $extended_field.content}checked{/if} />
+              <label for="eft_{$client_field_id}_{$count}">{$option.option_text|escape}</label>
+              {if $extended_field.field_orientation == "vertical"}<br />{/if}
+          {/foreach}
+        {else}
+          {display_option_list option_list_id=$extended_field.option_list_id name="ecf_`$client_field_id`" format="radios"
+            default_value=$extended_field.content}
+        {/if}
 
       {elseif $extended_field.field_type == "checkboxes"}
 
-        {foreach from=$extended_field.options key=k2 item=option name="row"}
-          {assign var="count" value=$smarty.foreach.row.iteration}
-          {assign var="escaped_value" value=$option.option_text|escape}
-          <input type="checkbox" name="ecf_{$client_field_id}[]" id="eft_{$client_field_id}_{$count}" value="{$option.option_text|escape}"
-            {if $escaped_value|in_array:$extended_field.content}checked{/if} />
-            <label for="eft_{$client_field_id}_{$count}">{$option.option_text|escape}</label>
-            {if $extended_field.field_orientation == "vertical"}<br />{/if}
-        {/foreach}
+        {if $extended_field.option_source == "custom_list"}
+          {foreach from=$extended_field.options key=k2 item=option name="row"}
+            {assign var="count" value=$smarty.foreach.row.iteration}
+            {assign var="escaped_value" value=$option.option_text|escape}
+            <input type="checkbox" name="ecf_{$client_field_id}[]" id="eft_{$client_field_id}_{$count}" value="{$option.option_text|escape}"
+              {if $escaped_value|in_array:$extended_field.content}checked{/if} />
+              <label for="eft_{$client_field_id}_{$count}">{$option.option_text|escape}</label>
+              {if $extended_field.field_orientation == "vertical"}<br />{/if}
+          {/foreach}
+        {else}
+          {display_option_list option_list_id=$extended_field.option_list_id name="ecf_`$client_field_id`" format="checkboxes"
+            default_value=$extended_field.content}
+        {/if}
 
       {elseif $extended_field.field_type == "select"}
 
-        <select name="ecf_{$client_field_id}">
-          {foreach from=$extended_field.options key=k2 item=option}
-            {assign var="escaped_value" value=$option.option_text|escape}
-            <option value="{$option.option_text|escape}" {if $escaped_value == $extended_field.content}selected{/if}>{$option.option_text}</option>
-           {/foreach}
-        </select>
+        {if $extended_field.option_source == "custom_list"}
+          <select name="ecf_{$client_field_id}">
+            {foreach from=$extended_field.options key=k2 item=option}
+              {assign var="escaped_value" value=$option.option_text|escape}
+              <option value="{$option.option_text|escape}" {if $escaped_value == $extended_field.content}selected{/if}>{$option.option_text}</option>
+             {/foreach}
+          </select>
+        {else}
+          {display_option_list option_list_id=$extended_field.option_list_id name="ecf_`$client_field_id`" format="select"
+            default_value=$extended_field.content}
+        {/if}
 
       {elseif $extended_field.field_type == "multi-select"}
 
-        <select name="ecf_{$client_field_id}[]" multiple size="4">
-          {foreach from=$extended_field.options key=k2 item=option}
-            {assign var="escaped_value" value=$option.option_text|escape}
-            <option value="{$option.option_text|escape}"
-              {if $escaped_value|in_array:$extended_field.content}selected{/if}>{$option.option_text}</option>
-           {/foreach}
-        </select>
+        {if $extended_field.option_source == "custom_list"}
+          <select name="ecf_{$client_field_id}[]" multiple size="4">
+            {foreach from=$extended_field.options key=k2 item=option}
+              {assign var="escaped_value" value=$option.option_text|escape}
+              <option value="{$option.option_text|escape}"
+                {if $escaped_value|in_array:$extended_field.content}selected{/if}>{$option.option_text}</option>
+             {/foreach}
+          </select>
+        {else}
+          {display_option_list option_list_id=$extended_field.option_list_id name="ecf_`$client_field_id`" format="multi-select"
+            default_value=$extended_field.content}
+        {/if}
 
       {/if}
     </td>

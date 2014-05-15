@@ -19,13 +19,16 @@ function ecf_add_field($info)
     $next_order = $result["field_order"] + 1;
 
   $is_required = (isset($info["is_required"])) ? "yes" : "no";
+  $option_source  = (isset($info["option_source"])) ? $info["option_source"] : "option_list";
+  $option_list_id = (isset($info["option_list_id"])) ? "'{$info["option_list_id"]}'" : "NULL";
 
   // add the main record first
   $query = mysql_query("
     INSERT INTO {$g_table_prefix}module_extended_client_fields (template_hook, admin_only, field_label, field_type,
-      field_orientation, default_value, is_required, error_string, field_order)
+      option_source, option_list_id, field_orientation, default_value, is_required, error_string, field_order)
     VALUES ('{$info["template_hook"]}', '{$info["admin_only"]}', '{$info["field_label"]}', '{$info["field_type"]}',
-      '{$info["field_orientation"]}', '{$info["default_value"]}', '$is_required', '{$info["error_string"]}', $next_order)
+      '$option_source', $option_list_id, '{$info["field_orientation"]}', '{$info["default_value"]}', '$is_required',
+      '{$info["error_string"]}', $next_order)
       ");
 
   $client_field_id = mysql_insert_id();
@@ -63,6 +66,8 @@ function ecf_update_field($client_field_id, $info)
 
   $info = ft_sanitize($info);
   $is_required = (isset($info["is_required"])) ? "yes" : "no";
+  $option_source  = (isset($info["option_source"])) ? $info["option_source"] : "option_list";
+  $option_list_id = (isset($info["option_list_id"])) ? "'{$info["option_list_id"]}'" : "NULL";
 
   $result = mysql_query("
     UPDATE {$g_table_prefix}module_extended_client_fields
@@ -70,6 +75,8 @@ function ecf_update_field($client_field_id, $info)
             admin_only = '{$info["admin_only"]}',
             field_label = '{$info["field_label"]}',
             field_type = '{$info["field_type"]}',
+            option_source = '$option_source',
+            option_list_id = $option_list_id,
             field_orientation = '{$info["field_orientation"]}',
             default_value = '{$info["default_value"]}',
             field_order = '{$info["field_order"]}',
@@ -324,6 +331,7 @@ function ecf_display_fields($location, $template_vars)
   $smarty->template_dir  = "$g_root_dir/modules/extended_client_fields/smarty/";
   $smarty->compile_dir   = "$g_root_dir/themes/default/cache/";
 
+
   // now look through the incoming client settings, passed through $template_vars and determine
   // the selected value for each field
   $field_info = array();
@@ -338,6 +346,7 @@ function ecf_display_fields($location, $template_vars)
       $info["content"] = $info["default_value"];
     else
       $info["content"] = $template_vars["client_info"]["settings"]["ecf_{$client_field_id}"];
+
 
     // if this was a checkbox group or multi-select dropdown, split the selected item(s) into an array
     if ($info["field_type"] == "checkboxes" || $info["field_type"] == "multi-select")
@@ -397,7 +406,7 @@ function ecf_admin_save_extended_client_fields($postdata)
     while ($row = mysql_fetch_assoc($query))
       $client_field_ids[] = $row["client_field_id"];
 
-    // now loop through all
+    // now loop through all fields
     if (!empty($client_field_ids))
     {
       $settings = array();
@@ -413,7 +422,6 @@ function ecf_admin_save_extended_client_fields($postdata)
             $settings["ecf_{$id}"] = $val;
         }
       }
-
       ft_set_account_settings($client_id, $settings);
     }
   }
