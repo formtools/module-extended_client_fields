@@ -16,15 +16,13 @@ rules.push("required,template_hook,{$L["validation_no_template_hook"]}");
 rules.push("required,field_label,{$L["validation_no_field_label"]}");
 rules.push("required,field_type,{$L["validation_no_field_type"]}");
 
-Event.observe(window, "dom:loaded", 
+Event.observe(window, "dom:loaded",
   function()
-	{
-	  ecf_ns.add_field_option(null, null); 
-		ecf_ns.add_field_option(null, null); 
-		$("field_type").value = '';
-	});
-
+  {
+    ecf_ns.add_field_option(null, null);
+    ecf_ns.add_field_option(null, null);
+    $("field_type").value = '';
+  });
 EOF;
-
 
 ft_display_module_page("templates/add.tpl", $page_vars);

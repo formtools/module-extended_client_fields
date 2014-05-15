@@ -25,6 +25,7 @@ $L["word_help"] = "Help";
 
 $L["phrase_add_field"] = "Add Field";
 $L["phrase_add_new_field"] = "Add New Field";
+$L["phrase_edit_field"] = "Edit Field";
 $L["phrase_field_label"] = "Field Label";
 $L["phrase_field_type"] = "Field Type";
 $L["phrase_default_value"] = "Default Value";
@@ -35,6 +36,11 @@ $L["phrase_section_titles"] = "Section Titles";
 $L["phrase_update_order"] = "Update Order";
 $L["phrase_required_field"] = "Required field?";
 $L["phrase_error_string_c"] = "Error string:";
+$L["phrase_main_account_top"] = "Main Account Page - Top";
+$L["phrase_main_account_middle"] = "Main Account Page - Middle";
+$L["phrase_main_account_bottom"] = "Main Account Page - Bottom";
+$L["phrase_settings_page_top"] = "Settings Page - Top";
+$L["phrase_settings_page_bottom"] = "Settings Page - Bottom";
 
 $L["confirm_delete_field"] = "Are you sure you want to delete this extended field? This cannot be undone."; 
 
@@ -47,9 +53,11 @@ $L["notify_field_deleted"] = "The field has been deleted.";
 $L["notify_field_updated"] = "The field has been updated.";
 $L["notify_section_titles_updated"] = "The section titles have been updated.";
 $L["notify_field_order_updated"] = "The field order has been updated.";
+$L["notify_field_not_updated"] = "Sorry, there was a problem updating this field: ";
 
 $L["validation_no_template_hook"] = "Please choose the page and location where this field should appear.";
 $L["validation_no_field_label"] = "Please enter the field label.";
 $L["validation_no_field_type"] = "Please choose the field type.";
 
 $L["text_help"] = "Please see our <a href=\"http://modules.formtools.org/extended_client_fields/documentation.php\" target=\"_blank\">online help documentation</a> for information on how to use this module.";
+$L["text_client_field_titles_intro"] = "Your client fields can be inserted in different locations on the Edit Client pages, visible by the administrator and client. This page gives you the option of providing a title for each of the fields. These titles are omitted by default.";

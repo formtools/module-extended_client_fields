@@ -13,7 +13,7 @@ $num_options = count($field_info["options"]);
 // ------------------------------------------------------------------------------------------------
 
 $page_vars = array();
-$page_vars["head_title"] = $L["phrase_add_field"];
+$page_vars["head_title"] = $L["phrase_edit_field"];
 $page_vars["head_string"] = "<script type=\"text/javascript\" src=\"global/scripts/field_options.js\"></script>";
 $page_vars["field_info"] = $field_info;
 $page_vars["js_messages"] = array("word_delete");
@@ -29,7 +29,7 @@ var page_ns = {};
 page_ns.delete_field = function(client_field_id)
 {
   if (confirm("{$L["confirm_delete_field"]}"))
-	  window.location = 'index.php?delete=' + client_field_id;
+    window.location = 'index.php?delete=' + client_field_id;
 }
 EOF;
 
