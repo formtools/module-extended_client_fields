@@ -1,23 +1,34 @@
 <?php
 
 require("../../global/library.php");
-ft_init_module_page();
-$field_id = ft_load_module_field("extended_client_fields", "id", "field_id");
 
-if (isset($_POST["update"]))
-  list($g_success, $g_message) = ecf_update_field($field_id, $_POST);
+use FormTools\Core;
+use FormTools\Modules;
+use FormTools\Modules\ExtendedClientFields\Fields;
 
-$field_info = ecf_get_field($field_id);
+$module = Modules::initModulePage("admin");
+
+$LANG = Core::$L;
+$L = $module->getLangStrings();
+
+$field_id = Modules::loadModuleField("extended_client_fields", "id", "field_id");
+
+$success = true;
+$message = "";
+if (isset($_POST["update"])) {
+    list($success, $message) = Fields::updateField($field_id, $_POST, $L);
+}
+
+$field_info = Fields::getField($field_id);
 $num_options = count($field_info["options"]);
 
-// ------------------------------------------------------------------------------------------------
+$page_vars = array(
+    "head_title" => $L["phrase_edit_field"],
+    "field_info" => $field_info,
+    "js_messages" => array("word_delete")
+);
 
-$page_vars = array();
-$page_vars["head_title"] = $L["phrase_edit_field"];
-$page_vars["head_string"] = "<script type=\"text/javascript\" src=\"global/scripts/field_options.js\"></script>";
-$page_vars["field_info"] = $field_info;
-$page_vars["js_messages"] = array("word_delete");
-$page_vars["head_js"] =<<< EOF
+$page_vars["head_js"] =<<< END
 var rules = [];
 rules.push("required,template_hook,{$L["validation_no_template_hook"]}");
 rules.push("required,field_label,{$L["validation_no_field_label"]}");
@@ -31,7 +42,6 @@ page_ns.delete_field = function(client_field_id) {
     window.location = 'index.php?delete=' + client_field_id;
   }
 }
-EOF;
+END;
 
-
-ft_display_module_page("templates/edit.tpl", $page_vars);
+$module->displayPage("templates/edit.tpl", $page_vars);

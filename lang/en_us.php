@@ -44,7 +44,7 @@ $L["phrase_settings_page_bottom"] = "Settings Page - Bottom";
 $L["phrase_field_option_source"] = "Field Option Source";
 $L["phrase_custom_list"] = "Custom List";
 
-$L["confirm_delete_field"] = "Are you sure you want to delete this extended field? This cannot be undone.";
+$L["confirm_delete_field"] = "Are you sure you want to delete this field? This cannot be undone.";
 
 $L["notify_no_fields"] = "There are no additional fields added to the module yet. Click the button below to add a new field.";
 $L["notify_problem_installing"] = "There following error occurred when trying to create the database tables for this module: <b>{\$error}</b>";
@@ -60,5 +60,5 @@ $L["validation_no_template_hook"] = "Please choose the page and location where t
 $L["validation_no_field_label"] = "Please enter the field label.";
 $L["validation_no_field_type"] = "Please choose the field type.";
 
-$L["text_help"] = "Please see our <a href=\"http://modules.formtools.org/extended_client_fields/documentation.php\" target=\"_blank\">online help documentation</a> for information on how to use this module.";
+$L["text_help"] = "Please see our <a href=\"https://docs.formtools.org/modules/extended_client_fields/\" target=\"_blank\">online help documentation</a> for information on how to use this module.";
 $L["text_client_field_titles_intro"] = "Your client fields can be inserted in different locations on the Edit Client pages, visible by the administrator and client. This page gives you the option of providing a title for each of the fields. These titles are omitted by default.";

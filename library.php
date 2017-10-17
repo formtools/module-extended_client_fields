@@ -1,6 +1,4 @@
 <?php
 
-$folder = dirname(__FILE__);
-require_once("$folder/global/code/module.php");
-require_once("$folder/global/code/fields.php");
-require_once("$folder/global/code/section_titles.php");
+require_once(__DIR__. "/code/Fields.class.php");
+require_once(__DIR__. "/code/Module.class.php");
