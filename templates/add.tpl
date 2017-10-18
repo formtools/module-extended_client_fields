@@ -127,15 +127,7 @@
                     <th>{$LANG.phrase_display_text}</th>
                     <th class="del"></th>
                   </tr>
-                  {foreach from=$field_info.options item=option name=row}
-                    {assign var=count value=$smarty.foreach.row.iteration}
-                      <tr id="row_{$count}">
-                        <td class="medium_grey" align="center" id="field_option_{$count}_order">{$count}</td>
-                        <td><input type="text" style="width:99%" name="field_option_text_{$count}" value="{$option.option_text|escape}" /></td>
-                        <td class="del"><a href="#" onclick="ecf_ns.delete_field_option({$count})"></a></td>
-                      </tr>
-                    {/foreach}
-                  </tbody>
+                </tbody>
                 </table>
 
                 <div>

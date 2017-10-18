@@ -57,7 +57,6 @@ class Fields
                 if (!isset($info["field_option_text_$i"]) || empty($info["field_option_text_$i"])) {
                     continue;
                 }
-
                 $option_text = $info["field_option_text_$i"];
 
                 $db->query("
@@ -391,9 +390,9 @@ class Fields
             return "";
         }
 
-        $smarty = Core::$smarty;
+        $smarty = new Smarty();
+        $smarty->setCompileDir("$root_dir/themes/default/cache/");
         $smarty->setTemplateDir("$root_dir/modules/extended_client_fields/smarty_plugins/");
-//        $smarty->setCompileDir("$root_dir/themes/default/cache/");
 
         // now look through the incoming client settings, passed through $template_vars and determine
         // the selected value for each field
@@ -665,16 +664,15 @@ class Fields
         $db->query("
             SELECT field_order
             FROM {PREFIX}module_extended_client_fields
-            ORDER BY field_order
-            DESC LIMIT 1
+            ORDER BY field_order DESC LIMIT 1
         ");
         $db->execute();
 
-        $result = $db->fetch(PDO::FETCH_COLUMN);
+        $count = $db->fetch(PDO::FETCH_COLUMN);
 
         $next_order = 1;
-        if (!empty($result)) {
-            $next_order = $result["field_order"] + 1;
+        if (!empty($count)) {
+            $next_order = $count + 1;
         }
 
         return $next_order;

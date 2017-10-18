@@ -17,9 +17,13 @@ if (isset($_POST["add"])) {
     list($success, $message) = Fields::addField($_POST, $L);
 }
 
-$page_vars = array();
-$page_vars["head_title"] = $L["phrase_add_field"];
-$page_vars["js_messages"] = array("word_delete");
+$page_vars = array(
+    "g_success" => $success,
+    "g_message" => $message,
+    "head_title" => $L["phrase_add_field"],
+    "js_messages" => array("word_delete")
+);
+
 $page_vars["head_js"] =<<< EOF
 var rules = [];
 rules.push("required,template_hook,{$L["validation_no_template_hook"]}");

@@ -108,7 +108,7 @@ ecf_ns.change_field_type = function(choice) {
   }
   if (choice == "radios" || choice == "checkboxes" || choice == "select" || choice == "multi-select") {
     if ($("#field_options_div")[0].style.display == "none") {
-      $("#field_options_div").show(200);
+      $("#field_options_div").show();
     }
     if (choice == "radios" || choice == "checkboxes") {
       $("#fo1, #fo2").attr("disabled", "");
@@ -123,7 +123,7 @@ ecf_ns.change_field_type = function(choice) {
     }
   } else {
     if ($("#field_options_div")[0].style.display != "none") {
-      $("#field_options_div").hide(200);
+      $("#field_options_div").hide();
     }
   }
 
