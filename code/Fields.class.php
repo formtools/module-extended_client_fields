@@ -690,7 +690,7 @@ class Fields
     }
 
 
-    private function updateClientFields ($client_field_ids, $client_id, $postdata)
+    private static function updateClientFields ($client_field_ids, $client_id, $postdata)
     {
         if (!empty($client_field_ids)) {
             $settings = array();

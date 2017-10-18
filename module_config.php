@@ -151,7 +151,7 @@ $HOOKS = array(
     array(
         "hook_type"       => "code",
         "action_location" => "end",
-        "function_name"   => "ft_admin_update_client",
+        "function_name"   => "FormTools\\Administrator::adminUpdateClient",
         "hook_function"   => "adminSaveExtendedClientFields",
         "priority"        => "50"
     ),
@@ -193,14 +193,14 @@ $HOOKS = array(
     array(
         "hook_type"       => "code",
         "action_location" => "end",
-        "function_name"   => "ft_update_client",
+        "function_name"   => "FormTools\\Clients::updateClient",
         "hook_function"   => "clientSaveExtendedClientFields",
         "priority"        => "50"
     ),
     array(
         "hook_type"       => "code",
         "action_location" => "start",
-        "function_name"   => "ft_get_view_filter_sql",
+        "function_name"   => "FormTools\\Views::getViewFilterSql",
         "hook_function"   => "updateViewFilterSqlPlaceholders",
         "priority"        => "50"
     )
@@ -210,13 +210,11 @@ $HOOKS = array(
 $FILES = array(
     "add.php",
     "edit.php",
-    "global/",
-    "global/code/",
-    "global/code/fields.php",
-    "global/code/module.php",
-    "global/code/section_titles.php",
-    "global/scripts/",
-    "global/scripts/field_options.js",
+    "code/",
+    "code/Fields.class.php",
+    "code/Module.class.php",
+    "scripts/",
+    "scripts/field_options.js",
     "help.php",
     "images/",
     "images/icon_extended_client_fields.gif",
@@ -224,7 +222,6 @@ $FILES = array(
     "lang/",
     "lang/en_us.php",
     "library.php",
-    "module.php",
     "module_config.php",
     "smarty_plugins/",
     "smarty_plugins/section_html.tpl",
