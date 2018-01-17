@@ -454,6 +454,10 @@ class Fields
                         template_hook = 'edit_client_main_bottom'
             ");
             $db->execute();
+
+            // this just standardizes the info for use by updateClientFields
+            $postdata["info"] = $postdata["infohash"];
+
             self::updateClientFields($db->fetchAll(PDO::FETCH_COLUMN), $client_id, $postdata);
         }
 
@@ -468,6 +472,8 @@ class Fields
                        template_hook = 'edit_client_settings_bottom'
             ");
             $db->execute();
+
+            $postdata["info"] = $postdata["infohash"];
             self::updateClientFields($db->fetchAll(PDO::FETCH_COLUMN), $client_id, $postdata);
         }
     }
@@ -692,19 +698,22 @@ class Fields
 
     private static function updateClientFields ($client_field_ids, $client_id, $postdata)
     {
-        if (!empty($client_field_ids)) {
-            $settings = array();
-            foreach ($client_field_ids as $id) {
-                $settings["ecf_{$id}"] = "";
-                if (isset($postdata["infohash"]["ecf_{$id}"])) {
-                    if (is_array($postdata["infohash"]["ecf_{$id}"])) {
-                        $settings["ecf_{$id}"] = join("|", $postdata["infohash"]["ecf_{$id}"]);
-                    } else {
-                        $settings["ecf_{$id}"] = $postdata["infohash"]["ecf_{$id}"];
-                    }
+        if (empty($client_field_ids)) {
+            return;
+        }
+
+        $settings = array();
+        foreach ($client_field_ids as $id) {
+            $settings["ecf_{$id}"] = "";
+            if (isset($postdata["info"]["ecf_{$id}"])) {
+                if (is_array($postdata["info"]["ecf_{$id}"])) {
+                    $settings["ecf_{$id}"] = join("|", $postdata["info"]["ecf_{$id}"]);
+                } else {
+                    $settings["ecf_{$id}"] = $postdata["info"]["ecf_{$id}"];
                 }
             }
-            Accounts::setAccountSettings($client_id, $settings);
         }
+
+        Accounts::setAccountSettings($client_id, $settings);
     }
 }

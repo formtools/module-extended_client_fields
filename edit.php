@@ -23,6 +23,8 @@ $field_info = Fields::getField($field_id);
 $num_options = count($field_info["options"]);
 
 $page_vars = array(
+    "g_success" => $success,
+    "g_message" => $message,
     "head_title" => $L["phrase_edit_field"],
     "field_info" => $field_info,
     "js_messages" => array("word_delete")

@@ -19,8 +19,8 @@ class Module extends FormToolsModule
     protected $author = "Ben Keen";
     protected $authorEmail = "ben.keen@gmail.com";
     protected $authorLink = "https://formtools.org";
-    protected $version = "2.0.1";
-    protected $date = "2017-11-07";
+    protected $version = "2.0.2";
+    protected $date = "2018-01-16";
     protected $originLanguage = "en_us";
     protected $jsFiles = array(
         "{MODULEROOT}/scripts/field_options.js"
@@ -77,26 +77,7 @@ class Module extends FormToolsModule
                 $db->execute();
             }
 
-            // ADMIN template and code hooks
-            Hooks::registerHook("template", "extended_client_fields", "admin_edit_client_main_top", "", "displayFields");
-            Hooks::registerHook("template", "extended_client_fields", "admin_edit_client_main_middle", "", "displayFields");
-            Hooks::registerHook("template", "extended_client_fields", "admin_edit_client_main_bottom", "", "displayFields");
-            Hooks::registerHook("template", "extended_client_fields", "admin_edit_client_settings_top", "", "displayFields");
-            Hooks::registerHook("template", "extended_client_fields", "admin_edit_client_settings_bottom", "", "displayFields");
-            Hooks::registerHook("template", "extended_client_fields", "admin_edit_view_client_map_filter_dropdown", "", "displayExtendedFieldOptions", 50, true);
-            Hooks::registerHook("template", "extended_client_fields", "head_bottom", "", "insertHeadJs");
-            Hooks::registerHook("code", "extended_client_fields", "end", "FormTools\\Administrator::adminUpdateClient", "adminSaveExtendedClientFields");
-
-            // CLIENT template and code hooks
-            Hooks::registerHook("template", "extended_client_fields", "edit_client_main_top", "", "displayFields");
-            Hooks::registerHook("template", "extended_client_fields", "edit_client_main_middle", "", "displayFields");
-            Hooks::registerHook("template", "extended_client_fields", "edit_client_main_bottom", "", "displayFields");
-            Hooks::registerHook("template", "extended_client_fields", "edit_client_settings_top", "", "displayFields");
-            Hooks::registerHook("template", "extended_client_fields", "edit_client_settings_bottom", "", "displayFields");
-            Hooks::registerHook("code", "extended_client_fields", "end", "FormTools\\Clients::updateClient", "clientSaveExtendedClientFields");
-
-            // general code hooks
-            Hooks::registerHook("code", "extended_client_fields", "start", "FormTools\\Views::getViewFilterSql", "updateViewFilterSqlPlaceholders");
+            $this->resetHooks();
 
         } catch (PDOException $e) {
             $success = false;
@@ -106,6 +87,7 @@ class Module extends FormToolsModule
 
         return array($success, $message);
     }
+
 
     public function uninstall($module_id)
     {
@@ -131,6 +113,39 @@ class Module extends FormToolsModule
         $db->execute();
 
         return array(true, "");
+    }
+
+
+    public function upgrade($module_id, $old_module_version)
+    {
+        $this->resetHooks();
+    }
+
+
+    public function resetHooks()
+    {
+        Hooks::unregisterModuleHooks("extended_client_fields");
+
+        // ADMIN template and code hooks
+        Hooks::registerHook("template", "extended_client_fields", "admin_edit_client_main_top", "", "displayFields");
+        Hooks::registerHook("template", "extended_client_fields", "admin_edit_client_main_middle", "", "displayFields");
+        Hooks::registerHook("template", "extended_client_fields", "admin_edit_client_main_bottom", "", "displayFields");
+        Hooks::registerHook("template", "extended_client_fields", "admin_edit_client_settings_top", "", "displayFields");
+        Hooks::registerHook("template", "extended_client_fields", "admin_edit_client_settings_bottom", "", "displayFields");
+        Hooks::registerHook("template", "extended_client_fields", "admin_edit_view_client_map_filter_dropdown", "", "displayExtendedFieldOptions", 50, true);
+        Hooks::registerHook("template", "extended_client_fields", "head_bottom", "", "insertHeadJs");
+        Hooks::registerHook("code", "extended_client_fields", "end", "FormTools\\Administrator::adminUpdateClient", "adminSaveExtendedClientFields");
+
+        // CLIENT template and code hooks
+        Hooks::registerHook("template", "extended_client_fields", "edit_client_main_top", "", "displayFields");
+        Hooks::registerHook("template", "extended_client_fields", "edit_client_main_middle", "", "displayFields");
+        Hooks::registerHook("template", "extended_client_fields", "edit_client_main_bottom", "", "displayFields");
+        Hooks::registerHook("template", "extended_client_fields", "edit_client_settings_top", "", "displayFields");
+        Hooks::registerHook("template", "extended_client_fields", "edit_client_settings_bottom", "", "displayFields");
+        Hooks::registerHook("code", "extended_client_fields", "end", "FormTools\\Clients::updateClient", "clientSaveExtendedClientFields");
+
+        // general code hooks
+        Hooks::registerHook("code", "extended_client_fields", "start", "FormTools\\Views::getViewFilterSql", "updateViewFilterSqlPlaceholders");
     }
 
 
