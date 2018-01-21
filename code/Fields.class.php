@@ -392,7 +392,10 @@ class Fields
 
         $smarty = new Smarty();
         $smarty->setCompileDir("$root_dir/themes/default/cache/");
-        $smarty->setTemplateDir("$root_dir/modules/extended_client_fields/smarty_plugins/");
+        $smarty->addPluginsDir(array(
+            "$root_dir/global/smarty_plugins",
+            "$root_dir/modules/extended_client_fields/smarty_plugins/"
+        ));
 
         // now look through the incoming client settings, passed through $template_vars and determine
         // the selected value for each field

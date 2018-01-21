@@ -19,8 +19,8 @@ class Module extends FormToolsModule
     protected $author = "Ben Keen";
     protected $authorEmail = "ben.keen@gmail.com";
     protected $authorLink = "https://formtools.org";
-    protected $version = "2.0.2";
-    protected $date = "2018-01-16";
+    protected $version = "2.0.3";
+    protected $date = "2018-01-20";
     protected $originLanguage = "en_us";
     protected $jsFiles = array(
         "{MODULEROOT}/scripts/field_options.js"
