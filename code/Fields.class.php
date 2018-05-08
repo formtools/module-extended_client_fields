@@ -8,7 +8,7 @@ use FormTools\Core;
 use FormTools\General;
 use FormTools\Modules;
 use FormTools\Sessions;
-use PDO, PDOException;
+use PDO;
 use Smarty, SmartyBC;
 
 
@@ -119,7 +119,7 @@ class Fields
                 "client_field_id" => $client_field_id
             ));
             $db->execute();
-        } catch (PDOException $e) {
+        } catch (Exception $e) {
             return array(false, $L["notify_field_not_updated"] . $e->getMessage());
         }
 

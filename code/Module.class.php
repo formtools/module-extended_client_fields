@@ -9,7 +9,7 @@ use FormTools\Hooks;
 use FormTools\Module as FormToolsModule;
 use FormTools\Modules;
 
-use PDOException;
+use Exception;
 
 
 class Module extends FormToolsModule
@@ -79,7 +79,7 @@ class Module extends FormToolsModule
 
             $this->resetHooks();
 
-        } catch (PDOException $e) {
+        } catch (Exception $e) {
             $success = false;
             $L = $this->getLangStrings();
             $message = General::evalSmartyString($L["notify_problem_installing"], array("error" => $e->getMessage()));
