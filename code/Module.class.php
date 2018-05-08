@@ -19,8 +19,8 @@ class Module extends FormToolsModule
     protected $author = "Ben Keen";
     protected $authorEmail = "ben.keen@gmail.com";
     protected $authorLink = "https://formtools.org";
-    protected $version = "2.0.3";
-    protected $date = "2018-01-20";
+    protected $version = "2.0.4";
+    protected $date = "2018-05-07";
     protected $originLanguage = "en_us";
     protected $jsFiles = array(
         "{MODULEROOT}/scripts/field_options.js"
@@ -145,7 +145,7 @@ class Module extends FormToolsModule
         Hooks::registerHook("code", "extended_client_fields", "end", "FormTools\\Clients::updateClient", "clientSaveExtendedClientFields");
 
         // general code hooks
-        Hooks::registerHook("code", "extended_client_fields", "start", "FormTools\\Views::getViewFilterSql", "updateViewFilterSqlPlaceholders");
+        Hooks::registerHook("code", "extended_client_fields", "start", "FormTools\\ViewFilters::getViewFilterSql", "updateViewFilterSqlPlaceholders");
     }
 
 
@@ -224,6 +224,6 @@ class Module extends FormToolsModule
     }
 
     public function updateViewFilterSqlPlaceholders($info) {
-        Fields::updateViewFilterSqlPlaceholders($info);
+        return Fields::updateViewFilterSqlPlaceholders($info);
     }
 }

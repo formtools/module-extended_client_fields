@@ -654,7 +654,7 @@ class Fields
         if ($is_client_account) {
             $settings = Sessions::get("account.settings");
             if (is_array($settings)) {
-                while (list($key, $value) = each($settings)) {
+                foreach ($settings as $key => $value) {
                     if (preg_match("/^ecf_(\d)+$/", $key, $matches)) {
                         $info["placeholders"][$key] = $value;
                     }
