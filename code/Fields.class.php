@@ -9,7 +9,7 @@ use FormTools\General;
 use FormTools\Modules;
 use FormTools\Sessions;
 use PDO, PDOException;
-use Smarty;
+use Smarty, SmartyBC;
 
 
 
@@ -390,7 +390,12 @@ class Fields
             return "";
         }
 
-        $smarty = new Smarty();
+        if (method_exists(new Core(), "useSmartyBC")) {
+            $smarty = Core::useSmartyBC() ? new SmartyBC() : new Smarty();
+        } else {
+            $smarty = new Smarty();
+        }
+
         $smarty->setCompileDir("$root_dir/themes/default/cache/");
         $smarty->addPluginsDir(array(
             "$root_dir/global/smarty_plugins",
