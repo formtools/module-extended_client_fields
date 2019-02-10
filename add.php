@@ -25,10 +25,19 @@ $page_vars = array(
 );
 
 $page_vars["head_js"] =<<< EOF
+var check_field_identifier = function () {
+	var field = $("#field_identifier");
+	if (/[^a-zA-Z0-9_]/g.test(field.val())) {
+		return [[field, "{$L["validation_invalid_field_identifier"]}"]]; 
+	}
+	return true;
+}
+
 var rules = [];
 rules.push("required,template_hook,{$L["validation_no_template_hook"]}");
 rules.push("required,field_label,{$L["validation_no_field_label"]}");
 rules.push("required,field_type,{$L["validation_no_field_type"]}");
+rules.push("function,check_field_identifier");
 $(function() {
     ecf_ns.add_field_option(null, null);
     ecf_ns.add_field_option(null, null);

@@ -29,15 +29,17 @@ class Fields
 
         $db->query("
             INSERT INTO {PREFIX}module_extended_client_fields (template_hook, admin_only, field_label, field_type,
-                option_source, option_list_id, field_orientation, default_value, is_required, error_string, field_order)
-            VALUES (:template_hook, :admin_only, :field_label, :field_type, :option_source, :option_list_id, :field_orientation,
-                :default_value, :is_required, :error_string, :list_order)
+                field_identifier, option_source, option_list_id, field_orientation, default_value, is_required,
+                error_string, field_order)
+            VALUES (:template_hook, :admin_only, :field_label, :field_type, :field_identifier, :option_source,
+            	:option_list_id, :field_orientation, :default_value, :is_required, :error_string, :list_order)
         ");
         $db->bindAll(array(
             "template_hook" => $info["template_hook"],
             "admin_only" => $info["admin_only"],
             "field_label" => $info["field_label"],
             "field_type" => $info["field_type"],
+            "field_identifier" => $info["field_identifier"],
             "option_source" => $info["option_source"],
             "option_list_id" => $option_list_id,
             "field_orientation" => $info["field_orientation"],
@@ -95,6 +97,7 @@ class Fields
                         admin_only = :admin_only,
                         field_label = :field_label,
                         field_type = :field_type,
+                        field_identifier = :field_identifier,
                         option_source = :option_source,
                         option_list_id = :option_list_id,
                         field_orientation = :field_orientation,
@@ -109,6 +112,7 @@ class Fields
                 "admin_only" => $info["admin_only"],
                 "field_label" => $info["field_label"],
                 "field_type" => $info["field_type"],
+				"field_identifier" => $info["field_identifier"],
                 "option_source" => $option_source,
                 "option_list_id" => $option_list_id,
                 "field_orientation" => $info["field_orientation"],
@@ -156,13 +160,13 @@ class Fields
     }
 
 
-    /**
-     * Returns a page (or all) client fields.
-     *
-     * @param integer $page_num
-     * @param array $search a hash whose keys correspond to database column names
-     * @return array
-     */
+	/**
+	 * Returns a page (or all) client fields.
+	 * @param int $page_num
+	 * @param int $num_per_page
+	 * @param array $search
+	 * @return array
+	 */
     public static function getClientFields($page_num = 1, $num_per_page = 10, $search = array())
     {
         $db = Core::$db;
@@ -590,10 +594,8 @@ class Fields
      * This function is attached to the admin_edit_view_client_map_filter_dropdown hook. It populates the
      * Edit View -> Client Map Filters -> client fields dropdown with any additional fields defined in this module.
      */
-    public static function displayExtendedFieldOptions($location, $template_vars)
+    public static function displayExtendedFieldOptions($template_vars, $L)
     {
-        $LANG = Core::$L;
-
         Modules::getModuleInstance("extended_client_fields");
 
         $client_fields = self::getClientFields(1, "all");
@@ -605,7 +607,7 @@ class Fields
         $client_map_filters = $template_vars["client_map_filters"];
         $selected_value     = $client_map_filters[$current_row-1]["filter_values"];
 
-        echo "<optgroup label=\"{$LANG["extended_client_fields"]["module_name"]}\">\n";
+        echo "<optgroup label=\"{$L["module_name"]}\">\n";
         foreach ($client_fields["results"] as $field_info) {
             $field_label = htmlspecialchars($field_info["field_label"]);
             $selected    = ($selected_value == "ecf_" . $field_info["client_field_id"]) ? "selected" : "";
@@ -649,27 +651,43 @@ class Fields
 
 
     /**
-     * This is called by the "start" hook in the ft_get_view_filter_sql function. It
-     * adds the extended client field placeholder variable with the e
+     * This is called by the "start" hook in the ft_get_view_filter_sql function. It adds the extended client field
+	 * placeholder variable with the extended client field settings.
+	 *
+	 * Note: $info["placeholders"] already exists
      */
     public static function updateViewFilterSqlPlaceholders($info)
     {
-        $is_client_account = Core::$user->getAccountType() == "client";
+    	$client_placeholders = self::getClientPlaceholders();
 
-        if ($is_client_account) {
-            $settings = Sessions::get("account.settings");
-            if (is_array($settings)) {
-                foreach ($settings as $key => $value) {
-                    if (preg_match("/^ecf_(\d)+$/", $key, $matches)) {
-                        $info["placeholders"][$key] = $value;
-                    }
-                }
-            }
-        }
+		if (!empty($client_placeholders)) {
+			$info["placeholders"] = array_merge($info["placeholders"], $client_placeholders);
+		}
 
         return $info;
     }
 
+    // TODO be nice to refactor this now we added field_identifier in 2.1.0. Using "ecf_X" as an identifier is a bit kludgy
+	// but it means making the field_identifier column required for all extended client fields. For for now, internally
+	// we use ecf_X to target the field, whereas end users can use the field_identifier value within their placeholders
+	// e.g. {$CLIENT.identifier_here}
+    public static function getClientPlaceholders()
+	{
+		$is_client_account = Core::$user->getAccountType() == "client";
+		$placeholders = array();
+		if ($is_client_account) {
+			$settings = Sessions::get("account.settings");
+			if (is_array($settings)) {
+				foreach ($settings as $key => $value) {
+					if (preg_match("/^ecf_(\d)+$/", $key, $matches)) {
+						$placeholders[$key] = $value;
+					}
+				}
+			}
+		}
+
+		return $placeholders;
+	}
 
     private static function getNextFieldOrder ()
     {

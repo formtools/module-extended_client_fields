@@ -32,7 +32,6 @@ $info = Fields::getClientFields($page);
 $results     = $info["results"];
 $num_results = $info["num_results"];
 
-
 $page_vars = array(
     "results" => $results,
     "head_title" => $module->getModuleName(),

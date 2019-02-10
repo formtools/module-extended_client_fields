@@ -19,17 +19,21 @@ class Module extends FormToolsModule
     protected $author = "Ben Keen";
     protected $authorEmail = "ben.keen@gmail.com";
     protected $authorLink = "https://formtools.org";
-    protected $version = "2.0.4";
-    protected $date = "2018-05-07";
+    protected $version = "2.1.0";
+    protected $date = "2019-01-10";
     protected $originLanguage = "en_us";
     protected $jsFiles = array(
         "{MODULEROOT}/scripts/field_options.js"
     );
+	protected $cssFiles = array(
+		"{MODULEROOT}/css/styles.css"
+	);
 
     protected $nav = array(
         "module_name"           => array("index.php", false),
         "phrase_add_field"      => array("add.php", true),
         "phrase_section_titles" => array("titles.php", false),
+		"word_placeholders"     => array("placeholders.php", false),
         "word_help"             => array("help.php", false)
     );
 
@@ -44,6 +48,7 @@ class Module extends FormToolsModule
             admin_only enum('yes','no') default NULL,
             field_label varchar(255) NOT NULL,
             field_type enum('textbox','textarea','password','radios','checkboxes','select','multi-select') NOT NULL,
+            field_identifier varchar(255) NOT NULL,
             option_source enum('option_list', 'custom_list') NOT NULL DEFAULT 'option_list',
             option_list_id MEDIUMINT NULL,
             field_orientation enum('horizontal','vertical','na') NOT NULL default 'na',
@@ -119,7 +124,9 @@ class Module extends FormToolsModule
     public function upgrade($module_id, $old_module_version)
     {
         $this->resetHooks();
-    }
+
+		self::addFieldIdentifierFieldIfNotExists();
+	}
 
 
     public function resetHooks()
@@ -146,6 +153,7 @@ class Module extends FormToolsModule
 
         // general code hooks
         Hooks::registerHook("code", "extended_client_fields", "start", "FormTools\\ViewFilters::getViewFilterSql", "updateViewFilterSqlPlaceholders");
+		Hooks::registerHook("code", "extended_client_fields", "main", "FormTools\\User->getAccountPlaceholders", "getExtendedClientFieldPlaceholders");
     }
 
 
@@ -205,6 +213,23 @@ class Module extends FormToolsModule
     }
 
 
+    // 2.1.0 added a new field_identifier column to allow the extended client fields to be used elsewhere in Form Tools,
+	// namely as placeholders in the "Default Values for New Submissions" view setting:
+	// https://github.com/formtools/core/issues/472
+	// This adds the column to the database. Note: existing users will need to add in the identifiers manually to be
+	// able to the user the feature
+    public static function addFieldIdentifierFieldIfNotExists() {
+		$db = Core::$db;
+
+		if (!General::checkDbTableFieldExists("module_extended_client_fields", "field_identifier")) {
+			$db->query("
+				ALTER TABLE {PREFIX}module_extended_client_fields
+				ADD field_identifier VARCHAR(255) NULL AFTER field_type
+			");
+			$db->execute();
+		}
+	}
+
     // ---------------- wrappers for hook calls ------------------
 
     public function displayFields($location, $template_vars) {
@@ -212,7 +237,7 @@ class Module extends FormToolsModule
     }
 
     public function displayExtendedFieldOptions($location, $template_vars) {
-        Fields::displayExtendedFieldOptions($location, $template_vars);
+        Fields::displayExtendedFieldOptions($template_vars, $this->getLangStrings());
     }
 
     public function adminSaveExtendedClientFields($postdata) {
@@ -226,4 +251,56 @@ class Module extends FormToolsModule
     public function updateViewFilterSqlPlaceholders($info) {
         return Fields::updateViewFilterSqlPlaceholders($info);
     }
+
+    // appends all ECF placeholders for use in the Default values for Submission fields (per View).
+    public function getExtendedClientFieldPlaceholders($info) {
+
+    	// we expect the account_id to be passed containing the client/admin account ID
+    	if (!isset($info["account_id"]) || empty($info["account_id"])) {
+    		return;
+		}
+
+    	// in { ecf_1 => "value", "ecf_2" => "value" } format
+    	$placeholders = Fields::getClientPlaceholders();
+    	if (empty($placeholders)) {
+    		return;
+		}
+
+    	$keys = array_keys($placeholders);
+
+    	$fields = Fields::getClientFields(1, "all");
+    	$found = array();
+    	foreach ($fields["results"] as $field_info) {
+    		$current_key = "ecf_{$field_info["client_field_id"]}";
+    		if (in_array($current_key, $keys) && !empty($field_info["field_identifier"])) {
+				$found[$field_info["field_identifier"]] = $placeholders[$current_key];
+			}
+		}
+		$info["placeholders"]["CLIENT"] = $found;
+
+		return $info;
+	}
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
