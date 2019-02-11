@@ -38,6 +38,13 @@ $STRUCTURE["tables"]["module_extended_client_fields"] = array(
         "Key"     => "",
         "Default" => ""
     ),
+	array(
+		"Field"   => "field_identifier",
+		"Type"    => "varchar(255)",
+		"Null"    => "YES",
+		"Key"     => "",
+		"Default" => ""
+	),
     array(
         "Field"   => "field_orientation",
         "Type"    => "enum('horizontal','vertical','na')",
@@ -98,6 +105,7 @@ $STRUCTURE["tables"]["module_extended_client_field_options"] = array(
     )
 );
 
+
 $HOOKS = array(
     array(
         "hook_type"       => "template",
@@ -120,6 +128,7 @@ $HOOKS = array(
         "hook_function"   => "displayFields",
         "priority"        => "50"
     ),
+
     array(
         "hook_type"       => "template",
         "action_location" => "admin_edit_client_settings_top",
@@ -200,10 +209,17 @@ $HOOKS = array(
     array(
         "hook_type"       => "code",
         "action_location" => "start",
-        "function_name"   => "FormTools\\Views::getViewFilterSql",
+        "function_name"   => "FormTools\\ViewFilters::getViewFilterSql",
         "hook_function"   => "updateViewFilterSqlPlaceholders",
         "priority"        => "50"
-    )
+    ),
+	array(
+		"hook_type"       => "code",
+		"action_location" => "main",
+		"function_name"   => "FormTools\\User->getAccountPlaceholders",
+		"hook_function"   => "getExtendedClientFieldPlaceholders",
+		"priority"        => "50"
+	)
 );
 
 
