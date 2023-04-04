@@ -174,7 +174,7 @@ class Fields
         $where_clause = "";
         if (!empty($search)) {
             $clauses = array();
-            while (list($key, $value) = each($search)) {
+            foreach ($search as $key => $value) {
                 $clauses[] = "$key = '$value'";
             }
             if (!empty($clauses)) {
@@ -438,13 +438,12 @@ class Fields
         $smarty->assign("fields", $field_info);
 
         // tack on all the template vars passed by the page
-        while (list($key, $value) = each($template_vars)) {
+        foreach ($template_vars as $key => $value) {
             $smarty->assign($key, $value);
         }
 
         echo $smarty->fetch("$root_dir/modules/extended_client_fields/smarty_plugins/section_html.tpl");
     }
-
 
     /**
      * This function is called whenever the administrator updates the client, for either of the
